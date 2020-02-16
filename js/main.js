@@ -1,53 +1,101 @@
 'use strict';
 
+function createAvatarNumber(i) {
+  return i < 10 ? '0' + (i + 1) : i + 1;
+}
+
+function getRandomInteger(min, max) {
+  var rand = min + Math.random() * (max + 1 - min);
+  return Math.floor(rand);
+}
+
+function getRandomArray(array) {
+  var randpmArray = [];
+  for (var i = 0; i <= getRandomInteger(0, array.length - 1); i++) {
+    randpmArray.push(array[i]);
+  }
+  return randpmArray;
+}
+
+var times = ['12:00', '13:00', '14:00'];
+var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var type = ['palace', 'flat', 'house', 'bungalo'];
+var photos = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+
 function createOffer(i) {
-  var avatarNumber = i < 10 ? '0' + (i + 1) : i + 1;
-  var Offer =
+  var offer =
   {
-    'author': {
-      'avatar': 'img/avatars/user' + avatarNumber + '.png'
+    author: {
+      avatar: 'img/avatars/user' + createAvatarNumber(i) + '.png'
     },
-    'offer': {
-      'title': 'Title ' + i,
-      'address': address[i],
-      'price': 100,
-      'type': 'palace',
-      'rooms': 2,
-      'guests': 2,
-      'checkin': '12:00',
-      'checkout': '12:00',
-      'features': ['wifi', 'dishwasher'],
-      'description': 'description 1',
-      'photos': ['http://o0.github.io/assets/images/tokyo/hotel1.jpg'],
+    offer: {
+      title: 'Title ' + i,
+      address: function () {
+        return this.location.x.toString() + this.location.y.toString();
+      },
+      price: getRandomInteger(100, 1000),
+      type: type[getRandomInteger(0, 3)],
+      rooms: getRandomInteger(1, 4),
+      guests: getRandomInteger(1, 4),
+      checkin: times[getRandomInteger(0, 2)],
+      checkout: times[getRandomInteger(0, 2)],
+      features: getRandomArray(features),
+      description: 'description' + i,
+      photos: getRandomArray(photos),
     },
-    'location': {
-      'x': locations[i].x,
-      'y': locations[i].y
+    location: {
+      x: getRandomInteger(100, 600),
+      y: getRandomInteger(130, 630)
     }
   };
 
-  return Offer;
+  return offer;
 }
 
-document.querySelector('.map').classList.remove('map--faded');
-var pins = document.querySelector('.map__pins');
-var elements = document.querySelector('#pin').content.querySelector('.map__pin');
-
-var address = ['100, 350', '150, 350', '100, 300', '500, 310', '400, 310', '360, 300', '90, 350', '260, 350'];
-var locations = [{x: 72, y: 140}, {x: 87, y: 140}, {x: 65, y: 140}, {x: 63, y: 180}, {x: 50, y: 180}, {x: 26, y: 630}, {x: 20, y: 600}, {x: 10, y: 550}];
-
-function addPins() {
+function drowPins() {
   var fragment = document.createDocumentFragment();
+  var pins = document.querySelector('.map__pins');
+  var elements = document.querySelector('#pin').content.querySelector('.map__pin');
   for (var i = 0; i < 8; i++) {
     var elem = createOffer(i);
     var element = elements.cloneNode(true);
     element.querySelector('img').alt = elem.offer.title;
     element.querySelector('img').src = elem.author.avatar;
-    element.style.top = +elem.offer.address.split(',')[0] + elem.location.x + 'px';
-    element.style.left = +elem.offer.address.split(',')[1] + elem.location.y + 'px';
+    element.style.top = elem.location.x + 'px';
+    element.style.left = elem.location.y + 'px';
     fragment.appendChild(element);
   }
-  return fragment;
+  pins.appendChild(fragment);
 }
 
-pins.appendChild(addPins());
+document.querySelector('.map').classList.remove('map--faded');
+drowPins();
+
+// function enableInputs() {
+//   var form = document.querySelector('.ad-form');
+//   var fieldset = form.querySelectorAll('fieldset');
+//   for (var i = 0; i < fieldset.length; i++) {
+//     fieldset[i].disabled = false;
+//   }
+// }
+
+// function disableInputs() {
+//   var form = document.querySelector('.ad-form');
+//   var fieldset = form.querySelectorAll('fieldset');
+//   for (var i = 0; i < fieldset.length; i++) {
+//     fieldset[i].disabled = true;
+//   }
+// }
+// disableInputs();
+
+// var mainPin = document.querySelector('.map__pin--main');
+// function makeActiv(evt) {
+//   if (evt.button === 0) {
+//     document.querySelector('.map').classList.remove('map--faded');
+//     document.querySelector('.ad-form').classList.remove('ad-form--disabled');
+//     enableInputs();
+//     drowPins();
+//   }
+//   mainPin.removeEventListener('mousedown', makeActiv);
+// }
+// mainPin.addEventListener('mousedown', makeActiv);
