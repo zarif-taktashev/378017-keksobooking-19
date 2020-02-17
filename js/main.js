@@ -1,5 +1,15 @@
 'use strict';
 
+var mainPin = document.querySelector('.map__pin--main');
+var MAIN_PIN_WIDTH = Math.floor(mainPin.offsetWidth);
+var MAIN_PIN_HEIGHT = Math.floor(mainPin.offsetHeight);
+var MAIN_PIN_LEFT = parseInt(mainPin.style.left, 10);
+var MAIN_PIN_TOP = parseInt(mainPin.style.top, 10);
+var PIN_OFFSET_X = 25;
+var PIN_OFFSET_Y = 70;
+var roomNumber = document.querySelector('#room_number');
+var capacity = document.querySelector('#capacity');
+
 function createAvatarNumber(i) {
   return i < 10 ? '0' + (i + 1) : i + 1;
 }
@@ -44,7 +54,7 @@ function createOffer(i) {
       photos: getRandomArray(photos),
     },
     location: {
-      x: getRandomInteger(100, 600),
+      x: getRandomInteger(100, 1100),
       y: getRandomInteger(130, 630)
     }
   };
@@ -61,41 +71,62 @@ function drowPins() {
     var element = elements.cloneNode(true);
     element.querySelector('img').alt = elem.offer.title;
     element.querySelector('img').src = elem.author.avatar;
-    element.style.top = elem.location.x + 'px';
-    element.style.left = elem.location.y + 'px';
+    element.style.left = +elem.location.x + PIN_OFFSET_X + 'px';
+    element.style.top = +elem.location.y - PIN_OFFSET_Y + 'px';
     fragment.appendChild(element);
   }
   pins.appendChild(fragment);
 }
 
-document.querySelector('.map').classList.remove('map--faded');
-drowPins();
+// это для следующего задания пожалуйста не обращайте внимания
 
-// function enableInputs() {
-//   var form = document.querySelector('.ad-form');
-//   var fieldset = form.querySelectorAll('fieldset');
-//   for (var i = 0; i < fieldset.length; i++) {
-//     fieldset[i].disabled = false;
-//   }
-// }
+function enableInputs() {
+  var form = document.querySelector('.ad-form');
+  var fieldset = form.querySelectorAll('fieldset');
+  for (var i = 0; i < fieldset.length; i++) {
+    fieldset[i].disabled = false;
+  }
+}
 
-// function disableInputs() {
-//   var form = document.querySelector('.ad-form');
-//   var fieldset = form.querySelectorAll('fieldset');
-//   for (var i = 0; i < fieldset.length; i++) {
-//     fieldset[i].disabled = true;
-//   }
-// }
-// disableInputs();
+function disableInputs() {
+  var form = document.querySelector('.ad-form');
+  var fieldset = form.querySelectorAll('fieldset');
+  for (var i = 0; i < fieldset.length; i++) {
+    fieldset[i].disabled = true;
+  }
+}
+disableInputs();
 
-// var mainPin = document.querySelector('.map__pin--main');
-// function makeActiv(evt) {
-//   if (evt.button === 0) {
-//     document.querySelector('.map').classList.remove('map--faded');
-//     document.querySelector('.ad-form').classList.remove('ad-form--disabled');
-//     enableInputs();
-//     drowPins();
-//   }
-//   mainPin.removeEventListener('mousedown', makeActiv);
-// }
-// mainPin.addEventListener('mousedown', makeActiv);
+function setActivAddress(evt) {
+  var x = evt ? Math.floor(evt.pageX + (MAIN_PIN_WIDTH / 2)) : Math.floor(MAIN_PIN_LEFT + (MAIN_PIN_WIDTH / 2));
+  var y = evt ? Math.floor(evt.pageY + MAIN_PIN_HEIGHT) : Math.floor(MAIN_PIN_TOP + (MAIN_PIN_HEIGHT / 2));
+  document.querySelector('#address').value = x.toString() + ' ' + y.toString();
+}
+
+setActivAddress();
+
+function makeActiv(evt) {
+  if (evt.button === 0 || evt.key === 'Enter') {
+    document.querySelector('.map').classList.remove('map--faded');
+    document.querySelector('.ad-form').classList.remove('ad-form--disabled');
+    enableInputs();
+    drowPins();
+    setActivAddress(evt);
+  }
+  mainPin.removeEventListener('mousedown', makeActiv);
+}
+mainPin.addEventListener('mousedown', makeActiv);
+mainPin.addEventListener('keydown', makeActiv);
+
+function roomValidation(evt) {
+  var target = evt.target;
+  if (roomNumber.value !== capacity.value) {
+    target.setCustomValidity('Количество гостей и комнат должно совподать');
+    target.reportValidity();
+  } else {
+    target.setCustomValidity('');
+  }
+}
+
+roomNumber.addEventListener('change', roomValidation);
+capacity.addEventListener('change', roomValidation);
