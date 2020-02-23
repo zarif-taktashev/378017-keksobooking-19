@@ -10,9 +10,16 @@ var PIN_OFFSET_X = 25;
 var PIN_OFFSET_Y = 70;
 var ENTER_BUTTON = 'Enter';
 var LEFT_MOUSE_BUTTON = 0;
+var ROOMS_RULE = 'Количество гостей и комнат должно совподать';
 var roomNumber = document.querySelector('#room_number');
 var capacity = document.querySelector('#capacity');
 var form = document.querySelector('.ad-form');
+var pins = document.querySelector('.map__pins');
+var addressInput = document.querySelector('#address');
+var times = ['12:00', '13:00', '14:00'];
+var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var type = ['palace', 'flat', 'house', 'bungalo'];
+var photos = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
 function createAvatarNumber(i) {
   return i < 10 ? '0' + (i + 1) : i + 1;
@@ -30,11 +37,6 @@ function getRandomArray(array) {
   }
   return randpmArray;
 }
-
-var times = ['12:00', '13:00', '14:00'];
-var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var type = ['palace', 'flat', 'house', 'bungalo'];
-var photos = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
 
 function createOffer(i) {
   var offer =
@@ -68,7 +70,6 @@ function createOffer(i) {
 
 function drawPins() {
   var fragment = document.createDocumentFragment();
-  var pins = document.querySelector('.map__pins');
   var elements = document.querySelector('#pin').content.querySelector('.map__pin');
   for (var i = 0; i < 8; i++) {
     var elem = createOffer(i);
@@ -99,10 +100,22 @@ function disableInputs() {
 }
 disableInputs();
 
+function getDynamycHorizontalPosition(elem) {
+  var pageX = elem.offsetLeft;
+  var bias = elem.offsetWidth / 2;
+  return Math.floor(pageX + bias);
+}
+
+function getDynamycVerticalPosition(elem) {
+  var pageY = elem.offsetTop;
+  var bias = elem.offsetHeight;
+  return Math.floor(pageY + bias);
+}
+
 function setActivAddress(evt) {
-  var x = evt ? Math.floor(evt.pageX + (MAIN_PIN_WIDTH / 2)) : Math.floor(MAIN_PIN_LEFT + (MAIN_PIN_WIDTH / 2));
-  var y = evt ? Math.floor(evt.pageY + MAIN_PIN_HEIGHT) : Math.floor(MAIN_PIN_TOP + (MAIN_PIN_HEIGHT / 2));
-  document.querySelector('#address').value = x.toString() + ' ' + y.toString();
+  var x = evt ? getDynamycHorizontalPosition(evt.currentTarget) : getDynamycHorizontalPosition(mainPin);
+  var y = evt ? getDynamycVerticalPosition(evt.currentTarget) : getDynamycVerticalPosition(mainPin);
+  addressInput.value = x.toString() + ', ' + y.toString();
 }
 
 setActivAddress();
@@ -123,7 +136,7 @@ mainPin.addEventListener('keydown', makeActive);
 function roomValidation(evt) {
   var target = evt.target;
   if (roomNumber.value !== capacity.value) {
-    target.setCustomValidity('Количество гостей и комнат должно совподать');
+    target.setCustomValidity(ROOMS_RULE);
     target.reportValidity();
   } else {
     target.setCustomValidity('');
