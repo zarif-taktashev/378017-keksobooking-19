@@ -1,11 +1,6 @@
 'use strict';
 
 var mainPin = document.querySelector('.map__pin--main');
-var MAIN_PIN_WIDTH = Math.floor(mainPin.offsetWidth);
-var MAIN_PIN_HEIGHT = Math.floor(mainPin.offsetHeight);
-var CALCULUS_SYSTEM = 10;
-var MAIN_PIN_LEFT = parseInt(mainPin.style.left, CALCULUS_SYSTEM);
-var MAIN_PIN_TOP = parseInt(mainPin.style.top, CALCULUS_SYSTEM);
 var PIN_OFFSET_X = 25;
 var PIN_OFFSET_Y = 70;
 var ENTER_BUTTON = 'Enter';
