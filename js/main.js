@@ -3,12 +3,16 @@
 var mainPin = document.querySelector('.map__pin--main');
 var MAIN_PIN_WIDTH = Math.floor(mainPin.offsetWidth);
 var MAIN_PIN_HEIGHT = Math.floor(mainPin.offsetHeight);
-var MAIN_PIN_LEFT = parseInt(mainPin.style.left, 10);
-var MAIN_PIN_TOP = parseInt(mainPin.style.top, 10);
+var CALCULUS_SYSTEM = 10;
+var MAIN_PIN_LEFT = parseInt(mainPin.style.left, CALCULUS_SYSTEM);
+var MAIN_PIN_TOP = parseInt(mainPin.style.top, CALCULUS_SYSTEM);
 var PIN_OFFSET_X = 25;
 var PIN_OFFSET_Y = 70;
+var ENTER_BUTTON = 'Enter';
+var LEFT_MOUSE_BUTTON = 0;
 var roomNumber = document.querySelector('#room_number');
 var capacity = document.querySelector('#capacity');
+var form = document.querySelector('.ad-form');
 
 function createAvatarNumber(i) {
   return i < 10 ? '0' + (i + 1) : i + 1;
@@ -62,7 +66,7 @@ function createOffer(i) {
   return offer;
 }
 
-function drowPins() {
+function drawPins() {
   var fragment = document.createDocumentFragment();
   var pins = document.querySelector('.map__pins');
   var elements = document.querySelector('#pin').content.querySelector('.map__pin');
@@ -81,7 +85,6 @@ function drowPins() {
 // это для следующего задания пожалуйста не обращайте внимания
 
 function enableInputs() {
-  var form = document.querySelector('.ad-form');
   var fieldset = form.querySelectorAll('fieldset');
   for (var i = 0; i < fieldset.length; i++) {
     fieldset[i].disabled = false;
@@ -89,7 +92,6 @@ function enableInputs() {
 }
 
 function disableInputs() {
-  var form = document.querySelector('.ad-form');
   var fieldset = form.querySelectorAll('fieldset');
   for (var i = 0; i < fieldset.length; i++) {
     fieldset[i].disabled = true;
@@ -105,18 +107,18 @@ function setActivAddress(evt) {
 
 setActivAddress();
 
-function makeActiv(evt) {
-  if (evt.button === 0 || evt.key === 'Enter') {
+function makeActive(evt) {
+  if (evt.button === LEFT_MOUSE_BUTTON || evt.key === ENTER_BUTTON) {
     document.querySelector('.map').classList.remove('map--faded');
-    document.querySelector('.ad-form').classList.remove('ad-form--disabled');
+    form.classList.remove('ad-form--disabled');
     enableInputs();
-    drowPins();
+    drawPins();
     setActivAddress(evt);
   }
-  mainPin.removeEventListener('mousedown', makeActiv);
+  mainPin.removeEventListener('mousedown', makeActive);
 }
-mainPin.addEventListener('mousedown', makeActiv);
-mainPin.addEventListener('keydown', makeActiv);
+mainPin.addEventListener('mousedown', makeActive);
+mainPin.addEventListener('keydown', makeActive);
 
 function roomValidation(evt) {
   var target = evt.target;
