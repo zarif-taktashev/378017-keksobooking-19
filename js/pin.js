@@ -1,35 +1,23 @@
 'use strict';
 
 (function () {
-  function createPins(i) {
-    var offer =
-    {
-      author: {
-        avatar: 'img/avatars/user' + window.data.createAvatarNumber(i) + '.png'
-      },
-      offer: {
-        title: 'Title ' + i,
-        address: function () {
-          return this.location.x.toString() + this.location.y.toString();
-        },
-        price: window.data.getRandomInteger(100, 1000),
-        type: window.data.TYPE[window.data.getRandomInteger(0, 3)],
-        rooms: window.data.getRandomInteger(1, 4),
-        guests: window.data.getRandomInteger(1, 4),
-        checkin: window.data.TIMES[window.data.getRandomInteger(0, 2)],
-        checkout: window.data.TIMES[window.data.getRandomInteger(0, 2)],
-        features: window.data.getRandomArray(window.data.FEATURES),
-        description: 'description' + i,
-        photos: window.data.getRandomArray(window.data.PHOTOS),
-      },
-      location: {
-        x: window.data.getRandomInteger(100, 1100),
-        y: window.data.getRandomInteger(130, 630)
-      }
-    };
+  var pin = document.querySelector('#pin').content.querySelector('.map__pin');
+  var pins = document.querySelector('.map__pins');
 
-    return offer;
+  function drawPins(response) {
+    var fragment = document.createDocumentFragment();
+    var elements = pin;
+    for (var i = 0; i < 8; i++) {
+      var elem = response[i];
+      var element = elements.cloneNode(true);
+      element.querySelector('img').alt = elem.offer.title;
+      element.querySelector('img').src = elem.author.avatar;
+      element.style.left = +elem.location.x + window.data.PIN_OFFSET_X + 'px';
+      element.style.top = +elem.location.y - window.data.PIN_OFFSET_Y + 'px';
+      fragment.appendChild(element);
+    }
+    pins.appendChild(fragment);
   }
 
-  window.createPins = createPins;
+  window.drawPins = drawPins;
 })();
