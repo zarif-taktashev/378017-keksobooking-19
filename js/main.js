@@ -78,8 +78,6 @@ function drawPins() {
   pins.appendChild(fragment);
 }
 
-// это для следующего задания пожалуйста не обращайте внимания
-
 function enableInputs() {
   var fieldset = form.querySelectorAll('fieldset');
   for (var i = 0; i < fieldset.length; i++) {
