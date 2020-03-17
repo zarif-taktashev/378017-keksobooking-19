@@ -10,6 +10,10 @@
   var timeout = document.querySelector('#timeout');
   var fieldset = form.querySelectorAll('fieldset');
   var price = document.querySelector('#price');
+  var address = document.querySelector('#address');
+  var reset = document.querySelector('.ad-form__reset');
+  var succesMessage = document.querySelector('#success').content.querySelector('.success');
+  var errorMessage = document.querySelector('#error').content.querySelector('.error');
 
   function enableInputs() {
     for (var i = 0; i < fieldset.length; i++) {
@@ -32,7 +36,8 @@
       x = Math.floor(mainPin.offsetLeft + (mainPin.offsetWidth / 2));
       y = Math.floor(mainPin.offsetTop + (mainPin.offsetHeight / 2));
     }
-    document.querySelector('#address').value = x.toString() + ', ' + y.toString();
+    address.parentNode.disabled = true;
+    address.value = x.toString() + ', ' + y.toString();
   }
 
   function checkValidation(evt) {
@@ -81,11 +86,42 @@
     }
   }
 
+  function hideMessage(evt) {
+    if (evt.button === window.data.buttons.LEFT_MOUSE_BUTTON || evt.key === window.data.buttons.ESC_BUTTON) {
+      if (document.body.querySelector('.success')) {
+        document.body.querySelector('main').removeChild(succesMessage);
+      } else {
+        document.body.querySelector('main').removeChild(errorMessage);
+      }
+      document.body.removeEventListener('mousedown', hideMessage);
+      document.body.removeEventListener('keydown', hideMessage);
+    }
+  }
+
+  function sendData(evt) {
+    evt.preventDefault();
+    enableInputs();
+    window.upload(new FormData(document.querySelector('.ad-form')), function (response, message) {
+      if (response) {
+        document.body.querySelector('main').appendChild(message);
+        document.body.addEventListener('mousedown', hideMessage);
+        document.body.addEventListener('keydown', hideMessage);
+        window.map.makeNotActive();
+      }
+    });
+  }
+
+  function resetData() {
+    form.reset();
+  }
+
   roomNumber.addEventListener('change', checkValidation);
   capacity.addEventListener('change', checkValidation);
   type.addEventListener('change', checkType);
   timein.addEventListener('change', checkTime);
   timeout.addEventListener('change', checkTime);
+  form.addEventListener('submit', sendData);
+  reset.addEventListener('click', resetData);
 
   window.form = {
     enableInputs: enableInputs,

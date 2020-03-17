@@ -5,9 +5,16 @@
   var filters = document.querySelector('.map__filters-container');
   var map = document.querySelector('.map');
 
+  function removeCardFromMap() {
+    if (map.querySelector('.map__card')) {
+      map.removeChild(map.querySelector('.map__card'));
+    }
+  }
+
+
   function hideCard(evt) {
     if (evt.button === window.data.buttons.LEFT_MOUSE_BUTTON || evt.key === window.data.buttons.ESC_BUTTON) {
-      map.removeChild(map.querySelector('.map__card'));
+      removeCardFromMap();
     }
   }
 
@@ -61,6 +68,9 @@
     fragment.appendChild(card);
     map.insertBefore(fragment, filters);
   }
-
-  window.drawCards = drawCards;
+  window.card = {
+    hideCard: hideCard,
+    drawCards: drawCards,
+    removeCardFromMap: removeCardFromMap
+  };
 })();

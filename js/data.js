@@ -56,6 +56,11 @@
     TYPE_NOT_EXIST: 'Не существующий тип'
   };
 
+  window.data.prices = {
+    'low': '10000',
+    'high': '50000'
+  };
+
   window.tagnames = {
     IMG: 'IMG',
     BUTTON: 'BUTTON'
