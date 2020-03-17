@@ -1,16 +1,6 @@
 'use strict';
 
 (function () {
-  var PIN_OFFSET_X = 25;
-  var PIN_OFFSET_Y = 70;
-  var ENTER_BUTTON = 'Enter';
-  var LEFT_MOUSE_BUTTON = 0;
-  var ROOMS_RULE = 'Количество гостей и комнат должно совподать';
-  var TIMES = ['12:00', '13:00', '14:00'];
-  var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-  var TYPE = ['palace', 'flat', 'house', 'bungalo'];
-  var PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
-
   function createAvatarNumber(i) {
     return i < 10 ? '0' + (i + 1) : i + 1;
   }
@@ -28,18 +18,51 @@
     return randomArray;
   }
 
-  window.data = {
-    PIN_OFFSET_X: PIN_OFFSET_X,
-    PIN_OFFSET_Y: PIN_OFFSET_Y,
-    ENTER_BUTTON: ENTER_BUTTON,
-    LEFT_MOUSE_BUTTON: LEFT_MOUSE_BUTTON,
-    ROOMS_RULE: ROOMS_RULE,
-    TIMES: TIMES,
-    FEATURES: FEATURES,
-    TYPE: TYPE,
-    PHOTOS: PHOTOS,
-    createAvatarNumber: createAvatarNumber,
+  window.service(function (response) {
+    window.dataBase = response;
+  });
+
+  window.data = {};
+
+  window.data.methods = {
+    getRandomArray: getRandomArray,
     getRandomInteger: getRandomInteger,
-    getRandomArray: getRandomArray
+    createAvatarNumber: createAvatarNumber
+  };
+
+  window.data.validationRules = {
+    ROOMS_RULE: 'Количество гостей и комнат должно совподать',
+    TIME_RULE: 'Время заезда и выезда должно совподать'
+  };
+
+  window.data.offsets = {
+    PIN_OFFSET_X: 25,
+    PIN_OFFSET_Y: 70,
+    PIN_OFFSET_Y_ACTIVE: 18
+  };
+
+  window.data.buttons = {
+    ENTER_BUTTON: 'Enter',
+    ESC_BUTTON: 'Escape',
+    LEFT_MOUSE_BUTTON: 0
+  };
+
+  window.data.pins = {
+    LIMITS: 5
+  };
+
+  window.data.errors = {
+    BUILD_TYPE: 'No such build type',
+    TYPE_NOT_EXIST: 'Не существующий тип'
+  };
+
+  window.data.prices = {
+    'low': '10000',
+    'high': '50000'
+  };
+
+  window.tagnames = {
+    IMG: 'IMG',
+    BUTTON: 'BUTTON'
   };
 })();
