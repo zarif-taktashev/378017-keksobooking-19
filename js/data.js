@@ -1,34 +1,11 @@
 'use strict';
 
 (function () {
-  function createAvatarNumber(i) {
-    return i < 10 ? '0' + (i + 1) : i + 1;
-  }
-
-  function getRandomInteger(min, max) {
-    var rand = min + Math.random() * (max + 1 - min);
-    return Math.floor(rand);
-  }
-
-  function getRandomArray(array) {
-    var randomArray = [];
-    for (var i = 0; i <= getRandomInteger(0, array.length - 1); i++) {
-      randomArray.push(array[i]);
-    }
-    return randomArray;
-  }
-
   window.service(function (response) {
     window.dataBase = response;
   });
 
   window.data = {};
-
-  window.data.methods = {
-    getRandomArray: getRandomArray,
-    getRandomInteger: getRandomInteger,
-    createAvatarNumber: createAvatarNumber
-  };
 
   window.data.validationRules = {
     ROOMS_RULE: 'Количество гостей и комнат должно совподать',

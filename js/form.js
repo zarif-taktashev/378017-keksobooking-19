@@ -8,7 +8,7 @@
   var type = document.querySelector('#type');
   var timein = document.querySelector('#timein');
   var timeout = document.querySelector('#timeout');
-  var fieldset = form.querySelectorAll('fieldset');
+  var fieldsets = form.querySelectorAll('fieldset');
   var price = document.querySelector('#price');
   var address = document.querySelector('#address');
   var reset = document.querySelector('.ad-form__reset');
@@ -16,13 +16,13 @@
   var errorMessage = document.querySelector('#error').content.querySelector('.error');
 
   function enableInputs() {
-    for (var i = 0; i < fieldset.length; i++) {
-      fieldset[i].disabled = false;
+    for (var i = 0; i < fieldsets.length; i++) {
+      fieldsets[i].disabled = false;
     }
   }
   function disableInputs() {
-    for (var i = 0; i < fieldset.length; i++) {
-      fieldset[i].disabled = true;
+    for (var i = 0; i < fieldsets.length; i++) {
+      fieldsets[i].disabled = true;
     }
   }
 
@@ -42,7 +42,7 @@
 
   function checkValidation(evt) {
     var target = evt.target;
-    if (roomNumber.value !== capacity.value) {
+    if (roomNumber.value < capacity.value && roomNumber.value !== 100) {
       target.setCustomValidity(window.data.validationRules.ROOMS_RULE);
       target.reportValidity();
     } else {
@@ -113,6 +113,7 @@
 
   function resetData() {
     form.reset();
+    window.map.makeNotActive();
   }
 
   roomNumber.addEventListener('change', checkValidation);

@@ -94,7 +94,7 @@
   }
 
   function showCard(evt) {
-    if (evt.button === window.data.buttons.LEFT_MOUSE_BUTTON) {
+    if (evt.button === window.data.buttons.LEFT_MOUSE_BUTTON || evt.key === window.data.buttons.ENTER_BUTTON) {
       var target = evt.target;
       if (target.tagName === window.tagnames.IMG && !target.parentElement.classList.contains('map__pin--main')) {
         window.card.drawCards(window.dataBase[target.parentElement.dataset.index]);
@@ -110,6 +110,7 @@
   });
   mainPin.addEventListener('keydown', makeActive);
   mapPinsContainer.addEventListener('mousedown', showCard);
+  mapPinsContainer.addEventListener('keydown', showCard);
 
   window.map = {
     makeNotActive: makeNotActive,
