@@ -9,6 +9,7 @@
   var timein = document.querySelector('#timein');
   var timeout = document.querySelector('#timeout');
   var fieldsets = form.querySelectorAll('fieldset');
+  var mapFilter = document.querySelector('.map__filters');
   var price = document.querySelector('#price');
   var address = document.querySelector('#address');
   var reset = document.querySelector('.ad-form__reset');
@@ -19,10 +20,16 @@
     for (var i = 0; i < fieldsets.length; i++) {
       fieldsets[i].disabled = false;
     }
+    for (var j = 0; j < mapFilter.children.length; j++) {
+      mapFilter.children[j].disabled = false;
+    }
   }
   function disableInputs() {
     for (var i = 0; i < fieldsets.length; i++) {
       fieldsets[i].disabled = true;
+    }
+    for (var j = 0; j < mapFilter.children.length; j++) {
+      mapFilter.children[j].disabled = true;
     }
   }
 
@@ -53,8 +60,6 @@
   function checkTime(evt) {
     var target = evt.currentTarget;
     if (timeout.value !== timein.value) {
-      target.setCustomValidity(window.data.validationRules.TIME_RULE);
-      target.reportValidity();
       timeout.value = target.value;
       timein.value = target.value;
     } else {
@@ -113,6 +118,7 @@
 
   function resetData() {
     form.reset();
+    mapFilter.reset();
     window.map.makeNotActive();
   }
 

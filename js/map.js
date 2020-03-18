@@ -35,13 +35,16 @@
     resetPin();
     window.form.setActivAddress();
     mainPin.addEventListener('mousedown', makeActive);
+    mainPin.addEventListener('keydown', makeActive);
   }
   makeNotActive();
 
   function makeActive(evt) {
+    evt.preventDefault();
     mainPin.removeEventListener('mousedown', makeActive);
+    mainPin.removeEventListener('keydown', makeActive);
     mainPin.addEventListener('mousedown', putPin);
-    if (evt.button === window.data.buttons.LEFT_MOUSE_BUTTON || evt.key === window.data.buttons.ENTER_BUTTON) {
+    if (evt.button === window.data.buttons.LEFT_MOUSE_BUTTON || evt.key === window.data.buttons.ENTER_BUTTON || evt.button === window.data.buttons.RIGHT_MOUSE_BUTTON) {
       map.classList.remove('map--faded');
       form.classList.remove('ad-form--disabled');
       window.pins.drawPins(window.dataBase);
@@ -81,37 +84,37 @@
       moveAt(event.pageX, event.pageY);
     }
 
-    mapPinsContainer.addEventListener('mousemove', onMouseMove);
-    mapPinsContainer.addEventListener('mouseover', function () {
+    function deleteListeners() {
       mapPinsContainer.removeEventListener('mousemove', onMouseMove);
-      mainPin.onmouseup = null;
-    });
-    mainPin.addEventListener('mouseup', function () {
-      mapPinsContainer.removeEventListener('mousemove', onMouseMove);
-      mainPin.onmouseup = null;
-    });
+      mainPin.removeEventListener('mousemove', deleteListeners);
+    }
 
+    mapPinsContainer.addEventListener('mousemove', onMouseMove);
+    mapPinsContainer.addEventListener('mouseup', deleteListeners);
   }
 
   function showCard(evt) {
     if (evt.button === window.data.buttons.LEFT_MOUSE_BUTTON || evt.key === window.data.buttons.ENTER_BUTTON) {
       var target = evt.target;
+      if (document.querySelector('.map__pin.map__pin--active')) {
+        document.querySelector('.map__pin.map__pin--active').classList.remove('map__pin--active');
+      }
       if (target.tagName === window.tagnames.IMG && !target.parentElement.classList.contains('map__pin--main')) {
+        target.parentElement.classList.add('map__pin--active');
         window.card.drawCards(window.dataBase[target.parentElement.dataset.index]);
       } else if (target.tagName === window.tagnames.BUTTON && !target.classList.contains('map__pin--main')) {
+        target.classList.add('map__pin--active');
         window.card.drawCards(window.dataBase[target.dataset.index]);
       }
     }
   }
 
-  mainPin.addEventListener('mousedown', makeActive);
   mainPin.addEventListener('dragstart', function () {
     return false;
   });
-  mainPin.addEventListener('keydown', makeActive);
+
   mapPinsContainer.addEventListener('mousedown', showCard);
   mapPinsContainer.addEventListener('keydown', showCard);
-
   window.map = {
     makeNotActive: makeNotActive,
     hidePins: hidePins

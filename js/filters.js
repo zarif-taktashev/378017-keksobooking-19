@@ -18,58 +18,53 @@
     window.map.hidePins();
     window.card.removeCardFromMap();
     var fragment = document.createDocumentFragment();
-    window.dataBase.filter(function (item, index) {
+    for (var i = 0; i < window.data.pins.LIMITS; i++) {
       var result = true;
-      if (index >= window.data.pins.LIMITS) {
-        result = false;
-      }
-      if (item.offer.type !== housingType.value && housingType.value !== 'any') {
+      if (window.dataBase[i].offer.type !== housingType.value && housingType.value !== 'any') {
         result = false;
       }
       switch (housingPrice.value) {
         case 'middle':
-          result = window.data.prices.low < item.offer.price && item.offer.price < window.data.prices.high ? result : false;
+          result = window.data.prices.low < window.dataBase[i].offer.price && window.dataBase[i].offer.price < window.data.prices.high ? result : false;
           break;
         case 'low':
-          result = window.data.prices.low < item.offer.price ? false : result;
+          result = window.data.prices.low < window.dataBase[i].offer.price ? false : result;
           break;
         case 'high':
-          result = item.offer.price < window.data.prices.high ? false : result;
+          result = window.dataBase[i].offer.price < window.data.prices.high ? false : result;
           break;
         default:
           break;
       }
-      if (item.offer.rooms !== parseInt(housingRooms.value, 10) && housingRooms.value !== 'any') {
+      if (window.dataBase[i].offer.rooms !== parseInt(housingRooms.value, 10) && housingRooms.value !== 'any') {
         result = false;
       }
-      if (item.offer.guests !== parseInt(housingGuests.value, 10) && housingGuests.value !== 'any') {
+      if (window.dataBase[i].offer.guests !== parseInt(housingGuests.value, 10) && housingGuests.value !== 'any') {
         result = false;
       }
       if (filterWifi.checked) {
-        result = item.offer.features.indexOf(filterWifi.value) > -1 ? result : false;
+        result = window.dataBase[i].offer.features.indexOf(filterWifi.value) > -1 ? result : false;
       }
       if (filterDishwasher.checked) {
-        result = item.offer.features.indexOf(filterDishwasher.value) > -1 ? result : false;
+        result = window.dataBase[i].offer.features.indexOf(filterDishwasher.value) > -1 ? result : false;
       }
       if (filterParking.checked) {
-        result = item.offer.features.indexOf(filterParking.value) > -1 ? result : false;
+        result = window.dataBase[i].offer.features.indexOf(filterParking.value) > -1 ? result : false;
       }
       if (filterWasher.checked) {
-        result = item.offer.features.indexOf(filterWasher.value) > -1 ? result : false;
+        result = window.dataBase[i].offer.features.indexOf(filterWasher.value) > -1 ? result : false;
       }
       if (filterElevator.checked) {
-        result = item.offer.features.indexOf(filterElevator.value) > -1 ? result : false;
+        result = window.dataBase[i].offer.features.indexOf(filterElevator.value) > -1 ? result : false;
       }
       if (filterConditioner.checked) {
-        result = item.offer.features.indexOf(filterConditioner.value) > -1 ? result : false;
+        result = window.dataBase[i].offer.features.indexOf(filterConditioner.value) > -1 ? result : false;
       }
 
       if (result) {
-        fragment.appendChild(window.pins.draw(item, index));
+        fragment.appendChild(window.pins.draw(window.dataBase[i], i));
       }
-
-      return result;
-    });
+    }
     window.pins.appendToMapPins(fragment);
   }
 

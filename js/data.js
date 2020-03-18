@@ -21,7 +21,8 @@
   window.data.buttons = {
     ENTER_BUTTON: 'Enter',
     ESC_BUTTON: 'Escape',
-    LEFT_MOUSE_BUTTON: 0
+    LEFT_MOUSE_BUTTON: 0,
+    RIGHT_MOUSE_BUTTON: 2
   };
 
   window.data.pins = {
