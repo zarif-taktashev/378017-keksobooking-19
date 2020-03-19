@@ -116,6 +116,10 @@
     });
   }
 
+  function makeRed(evt) {
+    evt.target.style.border = '1px solid #ff6547';
+  }
+
   function resetData() {
     form.reset();
     mapFilter.reset();
@@ -127,6 +131,7 @@
   type.addEventListener('change', checkType);
   timein.addEventListener('change', checkTime);
   timeout.addEventListener('change', checkTime);
+  form.addEventListener('invalid', makeRed);
   form.addEventListener('submit', sendData);
   reset.addEventListener('click', resetData);
 

@@ -64,8 +64,8 @@
         mainPin.style.left = pageX - mapOffsetLeft - mainPinOffsetWidth / 2 + 'px';
         mainPin.style.top = pageY - mapOffsetTop - mainPinOffsetHeight / 2 + 'px';
       }
-      if (pageY - mapOffsetTop - mainPinOffsetHeight / 2 <= 0) {
-        mainPin.style.top = 0 + 'px';
+      if (pageY - mapOffsetTop - mainPinOffsetHeight / 2 <= window.data.offsets.UPPER_BORDER - mainPinOffsetHeight / 2) {
+        mainPin.style.top = 130 - mainPinOffsetHeight / 2 + 'px';
       }
       if (pageX - mapOffsetLeft - mainPinOffsetWidth / 2 <= 0) {
         mainPin.style.left = 0 + 'px';
@@ -73,8 +73,8 @@
       if (pageX - mapOffsetLeft + mainPinOffsetWidth / 2 >= mapOffsetWidth) {
         mainPin.style.left = mapOffsetWidth - mainPinOffsetWidth + 'px';
       }
-      if (pageY + mainPinOffsetWidth / 2 + window.data.offsets.PIN_OFFSET_Y_ACTIVE >= mapOffsetHeight) {
-        mainPin.style.top = mapOffsetHeight - mainPinOffsetHeight - window.data.offsets.PIN_OFFSET_Y_ACTIVE + 'px';
+      if (pageY >= 630) {
+        mainPin.style.top = window.data.offsets.LOWER_BOUND - mainPinOffsetHeight / 2 + 'px';
       }
 
       window.form.setActivAddress();

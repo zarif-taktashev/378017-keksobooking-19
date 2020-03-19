@@ -15,7 +15,9 @@
   window.data.offsets = {
     PIN_OFFSET_X: 25,
     PIN_OFFSET_Y: 70,
-    PIN_OFFSET_Y_ACTIVE: 18
+    PIN_OFFSET_Y_ACTIVE: 18,
+    UPPER_BORDER: 130,
+    LOWER_BOUND: 630
   };
 
   window.data.buttons = {
