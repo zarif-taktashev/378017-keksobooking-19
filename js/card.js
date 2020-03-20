@@ -39,7 +39,7 @@
     } else {
       card.querySelector('.popup__text--address').style.display = 'none';
     }
-    if (data.offer.price ) {
+    if (data.offer.price) {
       card.querySelector('.popup__text--price').innerText = data.offer.price + '₽/ночь';
     } else {
       card.querySelector('.popup__text--price').style.display = 'none';
