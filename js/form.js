@@ -49,9 +49,12 @@
 
   function checkValidation(evt) {
     var target = evt.target;
-    if (roomNumber.value < capacity.value && roomNumber.value !== 100) {
-      target.setCustomValidity(window.data.validationRules.ROOMS_RULE);
-      target.reportValidity();
+    if (roomNumber.value < capacity.value) {
+      target === roomNumber ? capacity.setCustomValidity(window.data.validationRules.ROOMS_RULE) : roomNumber.setCustomValidity(window.data.validationRules.ROOMS_RULE);
+    } else if(target === roomNumber && parseInt(roomNumber.value, 10) === 100 && parseInt(capacity.value, 10) !== 0) {
+      capacity.setCustomValidity(window.data.validationRules.NOT_FOR_GUESTS);
+    } else if(target === capacity && parseInt(roomNumber.value, 10) !== 100 && parseInt(capacity.value, 10) === 0) {
+      roomNumber.setCustomValidity(window.data.validationRules.HUNDRED_GUESTS);
     } else {
       target.setCustomValidity('');
     }
@@ -116,8 +119,16 @@
     });
   }
 
+  function resetRed(evt) {
+    evt.target.style.border = '1px solid #d9d9d3';
+    evt.target.removeEventListener('change', resetRed);
+    form.addEventListener('invalid', makeRed, true);
+  }
+
   function makeRed(evt) {
+    form.removeEventListener('invalid', makeRed, true);
     evt.target.style.border = '1px solid #ff6547';
+    evt.target.addEventListener('change', resetRed);
   }
 
   function resetData() {
@@ -131,7 +142,7 @@
   type.addEventListener('change', checkType);
   timein.addEventListener('change', checkTime);
   timeout.addEventListener('change', checkTime);
-  form.addEventListener('invalid', makeRed);
+  form.addEventListener('invalid', makeRed, true);
   form.addEventListener('submit', sendData);
   reset.addEventListener('click', resetData);
 

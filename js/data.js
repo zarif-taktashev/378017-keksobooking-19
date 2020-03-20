@@ -8,8 +8,10 @@
   window.data = {};
 
   window.data.validationRules = {
-    ROOMS_RULE: 'Количество гостей и комнат должно совподать',
-    TIME_RULE: 'Время заезда и выезда должно совподать'
+    ROOMS_RULE: 'Количество гостей должно быть меньше комнат',
+    TIME_RULE: 'Время заезда и выезда должно совподать',
+    NOT_FOR_GUESTS: '100 комнат не для гостей',
+    HUNDRED_GUESTS: 'Необходимо 100 комнат'
   };
 
   window.data.offsets = {
