@@ -49,11 +49,13 @@
 
   function checkValidation(evt) {
     var target = evt.target;
-    if (roomNumber.value < capacity.value) {
-      target === roomNumber ? capacity.setCustomValidity(window.data.validationRules.ROOMS_RULE) : roomNumber.setCustomValidity(window.data.validationRules.ROOMS_RULE);
-    } else if(target === roomNumber && parseInt(roomNumber.value, 10) === 100 && parseInt(capacity.value, 10) !== 0) {
+    if (roomNumber.value < capacity.value && target === roomNumber) {
+      capacity.setCustomValidity(window.data.validationRules.ROOMS_RULE);
+    } else if (roomNumber.value < capacity.value && target === capacity) {
+      roomNumber.setCustomValidity(window.data.validationRules.ROOMS_RULE);
+    } else if (target === roomNumber && parseInt(roomNumber.value, 10) === 100 && parseInt(capacity.value, 10) !== 0) {
       capacity.setCustomValidity(window.data.validationRules.NOT_FOR_GUESTS);
-    } else if(target === capacity && parseInt(roomNumber.value, 10) !== 100 && parseInt(capacity.value, 10) === 0) {
+    } else if (target === capacity && parseInt(roomNumber.value, 10) !== 100 && parseInt(capacity.value, 10) === 0) {
       roomNumber.setCustomValidity(window.data.validationRules.HUNDRED_GUESTS);
     } else {
       target.setCustomValidity('');
