@@ -3,7 +3,7 @@
 (function () {
   window.data = {};
 
-  window.data.validationRules = {
+  window.data.validation = {
     ROOMS_RULE: 'Количество гостей должно быть меньше комнат',
     TIME_RULE: 'Время заезда и выезда должно совподать',
     NOT_FOR_GUESTS: '100 комнат не для гостей',
@@ -18,14 +18,14 @@
   };
 
   window.data.offsets = {
-    PIN_OFFSET_X: 25,
-    PIN_OFFSET_Y: 70,
-    PIN_OFFSET_Y_ACTIVE: 18,
+    PIN_X: 25,
+    PIN_Y: 70,
+    PIN_Y_ACTIVE: 18,
     UPPER_BORDER: 130,
     LOWER_BOUND: 630
   };
 
-  window.data.buttons = {
+  window.data.keys = {
     ENTER_BUTTON: 'Enter',
     ESC_BUTTON: 'Escape',
     LEFT_MOUSE_BUTTON: 0,

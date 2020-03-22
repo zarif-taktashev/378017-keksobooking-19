@@ -9,8 +9,8 @@
     element.querySelector('img').alt = data.offer.title;
     element.querySelector('img').src = data.author.avatar;
     element.dataset.index = i;
-    element.style.left = +data.location.x - window.data.offsets.PIN_OFFSET_X + 'px';
-    element.style.top = +data.location.y - window.data.offsets.PIN_OFFSET_Y + 'px';
+    element.style.left = +data.location.x - window.data.offsets.PIN_X + 'px';
+    element.style.top = +data.location.y - window.data.offsets.PIN_Y + 'px';
     return element;
   }
 

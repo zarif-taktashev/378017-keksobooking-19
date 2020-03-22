@@ -14,16 +14,16 @@
 
 
   function onHideCard(evt) {
-    if (evt.button === window.data.buttons.LEFT_MOUSE_BUTTON || evt.key === window.data.buttons.ESC_BUTTON) {
+    if (evt.button === window.data.keys.LEFT_MOUSE_BUTTON || evt.key === window.data.keys.ESC_BUTTON) {
       document.querySelector('.map__pin.map__pin--active').classList.remove('map__pin--active');
       removeFromMap();
     }
-    if (evt.currentTarget.tagName === 'BODY' && evt.key === window.data.buttons.ESC_BUTTON) {
+    if (evt.currentTarget.tagName === 'BODY' && evt.key === window.data.keys.ESC_BUTTON) {
       document.body.removeEventListener('keydown', onHideCard);
     }
   }
 
-  function drawCards(response) {
+  function drawTickets(response) {
     if (map.querySelector('.map__card')) {
       map.removeChild(map.querySelector('.map__card'));
     }
@@ -113,7 +113,7 @@
     map.insertBefore(fragment, filters);
   }
   window.card = {
-    drawCards: drawCards,
+    drawTickets: drawTickets,
     removeFromMap: removeFromMap
   };
 })();

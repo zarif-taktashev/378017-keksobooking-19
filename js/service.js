@@ -8,7 +8,6 @@
   var UNAUTHORIZED = 401;
   var NOT_FOUND = 404;
   var TIMEOUT = 10000;
-  window.ajax = {};
   var succesMessage = document.querySelector('#success').content.querySelector('.success');
   var errorMessage = document.querySelector('#error').content.querySelector('.error');
 
@@ -36,7 +35,7 @@
     return error;
   }
 
-  window.ajax.service = function (onSuccess, onError) {
+  function service(onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responsType = 'json';
     xhr.addEventListener('load', function () {
@@ -54,7 +53,7 @@
     xhr.send();
   };
 
-  window.ajax.upload = function (data, callBack) {
+  function upload(data, callBack) {
     var xhr = new XMLHttpRequest();
     xhr.addEventListener('load', function () {
       var error = checkResponse(xhr);
@@ -70,4 +69,9 @@
     xhr.open('POST', SEND_URL, true);
     xhr.send(data);
   };
+
+  window.ajax = {
+    upload: upload,
+    service: service
+  }
 })();

@@ -34,48 +34,47 @@
     form.reset();
     map.classList.add('map--faded');
     form.classList.add('ad-form--disabled');
-    window.form.disableInputs();
+    window.form.changeInputs();
     resetPin();
     avatarImg.src = 'img/muffin-grey.svg';
     if (photo.querySelector('img')) {
       photo.removeChild(photo.querySelector('img'));
     }
-    window.form.setActivAddress();
+    window.form.setActiveAddress();
     mainPin.addEventListener('mousedown', onMouseMakeActive);
     mainPin.addEventListener('keydown', onKeyMakeActive);
   }
   makeNotActive();
 
-  function onKeyMakeActive(evt) {
+  function mainPinEvent() {
     evt.preventDefault();
     mainPin.removeEventListener('mousedown', onMouseMakeActive);
     mainPin.removeEventListener('keydown', onKeyMakeActive);
     mainPin.addEventListener('mousedown', onPutPin);
-    if (evt.button === window.data.buttons.RIGHT_MOUSE_BUTTON) {
-      map.classList.remove('map--faded');
-      form.classList.remove('ad-form--disabled');
+  }
+
+  function makeActive(response, evt) {
+    map.classList.remove('map--faded');
+    form.classList.remove('ad-form--disabled');
+    window.dataBase = response;
+    window.pins.drawPins(response);
+    window.form.changeInputs();
+    window.form.setActiveAddress(evt);
+  }
+
+  function onKeyMakeActive(evt) {
+    mainPinEvent();
+    if (evt.button === window.data.keys.ENTER_BUTTON) {
       window.ajax.service(function (response) {
-        window.dataBase = response;
-        window.pins.drawPins(response);
-        window.form.enableInputs();
-        window.form.setActivAddress(evt);
+        makeActive(response, evt)
       });
     }
   }
 
   function onMouseMakeActive(evt) {
-    evt.preventDefault();
-    mainPin.removeEventListener('mousedown', onMouseMakeActive);
-    mainPin.removeEventListener('keydown', onKeyMakeActive);
-    mainPin.addEventListener('mousedown', onPutPin);
-    if (evt.button === window.data.buttons.LEFT_MOUSE_BUTTON || evt.button === window.data.buttons.RIGHT_MOUSE_BUTTON) {
-      map.classList.remove('map--faded');
-      form.classList.remove('ad-form--disabled');
+    if (evt.button === window.data.keys.LEFT_MOUSE_BUTTON || evt.button === window.data.keys.RIGHT_MOUSE_BUTTON) {
       window.ajax.service(function (response) {
-        window.dataBase = response;
-        window.pins.drawPins(response);
-        window.form.enableInputs();
-        window.form.setActivAddress(evt);
+        makeActive(response, evt)
       });
     }
   }
@@ -100,12 +99,12 @@
       if (pageX - mapOffsetLeft + mainPinOffsetWidth / 2 >= mapOffsetWidth) {
         mainPin.style.left = mapOffsetWidth - mainPinOffsetWidth + 'px';
       }
-      if (pageY + mainPin.offsetHeight / 2 + window.data.offsets.PIN_OFFSET_Y_ACTIVE >= window.data.offsets.LOWER_BOUND) {
-        mainPin.style.top = window.data.offsets.LOWER_BOUND - mainPin.offsetHeight - window.data.offsets.PIN_OFFSET_Y_ACTIVE + 'px';
+      if (pageY + mainPin.offsetHeight / 2 + window.data.offsets.PIN_Y_ACTIVE >= window.data.offsets.LOWER_BOUND) {
+        mainPin.style.top = window.data.offsets.LOWER_BOUND - mainPin.offsetHeight - window.data.offsets.PIN_Y_ACTIVE + 'px';
       }
 
       var x = Math.floor(mainPin.offsetLeft + (mainPin.offsetWidth / 2));
-      var y = Math.floor(mainPin.offsetTop + mainPin.offsetHeight + window.data.offsets.PIN_OFFSET_Y_ACTIVE);
+      var y = Math.floor(mainPin.offsetTop + mainPin.offsetHeight + window.data.offsets.PIN_Y_ACTIVE);
       address.value = x.toString() + ', ' + y.toString();
     }
 
@@ -124,20 +123,20 @@
   }
 
   function onShowCard(evt) {
-    if (evt.button === window.data.buttons.LEFT_MOUSE_BUTTON || evt.key === window.data.buttons.ENTER_BUTTON) {
+    if (evt.button === window.data.keys.LEFT_MOUSE_BUTTON || evt.key === window.data.keys.ENTER_BUTTON) {
       var target = evt.target;
       if (target.tagName === window.tagnames.IMG && !target.parentElement.classList.contains('map__pin--main')) {
         if (document.querySelector('.map__pin.map__pin--active')) {
           document.querySelector('.map__pin.map__pin--active').classList.remove('map__pin--active');
         }
         target.parentElement.classList.add('map__pin--active');
-        window.card.drawCards(window.dataBase[target.parentElement.dataset.index]);
+        window.card.drawTickets(window.dataBase[target.parentElement.dataset.index]);
       } else if (target.tagName === window.tagnames.BUTTON && !target.classList.contains('map__pin--main')) {
         if (document.querySelector('.map__pin.map__pin--active')) {
           document.querySelector('.map__pin.map__pin--active').classList.remove('map__pin--active');
         }
         target.classList.add('map__pin--active');
-        window.card.drawCards(window.dataBase[target.dataset.index]);
+        window.card.drawTickets(window.dataBase[target.dataset.index]);
       }
     }
   }

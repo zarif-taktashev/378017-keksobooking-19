@@ -12,10 +12,10 @@
   var filterWasher = filtersForm.querySelector('#filter-washer');
   var filterElevator = filtersForm.querySelector('#filter-elevator');
   var filterConditioner = filtersForm.querySelector('#filter-conditioner');
-  var lastTomeOut;
+  var lastTimeOut;
 
-  function checkFeatures(filter, i) {
-    return window.dataBase[i].offer.features.indexOf(filter.value) > -1;
+  function checkFeatures(result, filter, i) {
+    return window.dataBase[i].offer.features.indexOf(filter.value) > -1 ? result : false;
   }
 
   function checkForm() {
@@ -50,22 +50,22 @@
         result = false;
       }
       if (filterWifi.checked) {
-        result = checkFeatures(filterWifi, i) ? result : false;
+        result = checkFeatures(result, filterWifi, i);
       }
       if (filterDishwasher.checked) {
-        result = checkFeatures(filterDishwasher, i) ? result : false;
+        result = checkFeatures(result, filterDishwasher, i);
       }
       if (filterParking.checked) {
-        result = checkFeatures(filterParking, i) ? result : false;
+        result = checkFeatures(result, filterParking, i);
       }
       if (filterWasher.checked) {
-        result = checkFeatures(filterWasher, i) ? result : false;
+        result = checkFeatures(result, filterWasher, i);
       }
       if (filterElevator.checked) {
-        result = checkFeatures(filterElevator, i) ? result : false;
+        result = checkFeatures(result, filterElevator, i);
       }
       if (filterConditioner.checked) {
-        result = checkFeatures(filterConditioner, i) ? result : false;
+        result = checkFeatures(result, filterConditioner, i);
       }
 
       if (result) {
@@ -76,10 +76,10 @@
   }
 
   filtersForm.addEventListener('change', function () {
-    if (lastTomeOut) {
-      window.clearTimeout(lastTomeOut);
+    if (lastTimeOut) {
+      window.clearTimeout(lastTimeOut);
     }
-    lastTomeOut = window.setTimeout(function () {
+    lastTimeOut = window.setTimeout(function () {
       checkForm();
     }, 500);
   });

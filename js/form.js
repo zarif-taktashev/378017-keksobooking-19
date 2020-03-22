@@ -15,31 +15,33 @@
   var reset = document.querySelector('.ad-form__reset');
   var succesMessage = document.querySelector('#success').content.querySelector('.success');
   var errorMessage = document.querySelector('#error').content.querySelector('.error');
+  var NOT_FOR_GUESTS = 100;
+  var DECIMAL_SYSTEM = 10;
   var invalid;
 
-  function enableInputs() {
-    for (var i = 0; i < fieldsets.length; i++) {
-      fieldsets[i].removeAttribute('disabled');
-    }
-    for (var j = 0; j < mapFilter.children.length; j++) {
-      mapFilter.children[j].removeAttribute('disabled');
-    }
-  }
-  function disableInputs() {
-    for (var i = 0; i < fieldsets.length; i++) {
-      fieldsets[i].disabled = true;
-    }
-    for (var j = 0; j < mapFilter.children.length; j++) {
-      mapFilter.children[j].disabled = true;
+  function changeField(element) {
+    if (element.disabled) {
+      element.removeAttribute('disabled');
+    } else {
+      element.disabled = true;
     }
   }
 
-  function setActivAddress(evt) {
+  function changeInputs() {
+    for (var i = 0; i < fieldsets.length; i++) {
+      changeField(fieldsets[i]);
+    }
+    for (var j = 0; j < mapFilter.children.length; j++) {
+      changeField(mapFilter.children[j]);
+    }
+  }
+
+  function setActiveAddress(evt) {
     var x;
     var y;
     if (evt) {
       x = Math.floor(mainPin.offsetLeft + (mainPin.offsetWidth / 2));
-      y = Math.floor(mainPin.offsetTop + mainPin.offsetHeight + window.data.offsets.PIN_OFFSET_Y_ACTIVE);
+      y = Math.floor(mainPin.offsetTop + mainPin.offsetHeight + window.data.offsets.PIN_Y_ACTIVE);
     } else {
       x = Math.floor(mainPin.offsetLeft + (mainPin.offsetWidth / 2));
       y = Math.floor(mainPin.offsetTop + (mainPin.offsetHeight / 2));
@@ -51,13 +53,13 @@
   function onCheckValidation(evt) {
     var target = evt.target;
     if (roomNumber.value < capacity.value && target === roomNumber) {
-      capacity.setCustomValidity(window.data.validationRules.ROOMS_RULE);
+      capacity.setCustomValidity(window.data.validation.ROOMS_RULE);
     } else if (roomNumber.value < capacity.value && target === capacity) {
-      roomNumber.setCustomValidity(window.data.validationRules.ROOMS_RULE);
-    } else if (target === roomNumber && parseInt(roomNumber.value, 10) === 100 && parseInt(capacity.value, 10) !== 0) {
-      capacity.setCustomValidity(window.data.validationRules.NOT_FOR_GUESTS);
-    } else if (target === capacity && parseInt(roomNumber.value, 10) !== 100 && parseInt(capacity.value, 10) === 0) {
-      roomNumber.setCustomValidity(window.data.validationRules.HUNDRED_GUESTS);
+      roomNumber.setCustomValidity(window.data.validation.ROOMS_RULE);
+    } else if (target === roomNumber && parseInt(roomNumber.value, DECIMAL_SYSTEM) === NOT_FOR_GUESTS && parseInt(capacity.value, DECIMAL_SYSTEM) !== 0) {
+      capacity.setCustomValidity(window.data.validation.NOT_FOR_GUESTS);
+    } else if (target === capacity && parseInt(roomNumber.value, DECIMAL_SYSTEM) !== NOT_FOR_GUESTS && parseInt(capacity.value, DECIMAL_SYSTEM) === 0) {
+      roomNumber.setCustomValidity(window.data.validation.HUNDRED_GUESTS);
     } else {
       roomNumber.style.border = '1px solid #d9d9d3';
       capacity.style.border = '1px solid #d9d9d3';
@@ -83,7 +85,7 @@
   }
 
   function onMouseHideMessage(evt) {
-    if (evt.button === window.data.buttons.LEFT_MOUSE_BUTTON) {
+    if (evt.button === window.data.keys.LEFT_MOUSE_BUTTON) {
       if (document.body.querySelector('.success')) {
         document.body.querySelector('main').removeChild(succesMessage);
       } else {
@@ -95,7 +97,7 @@
   }
 
   function onKeyHideMessage(evt) {
-    if (evt.key === window.data.buttons.ESC_BUTTON) {
+    if (evt.key === window.data.keys.ESC_BUTTON) {
       if (document.body.querySelector('.success')) {
         document.body.querySelector('main').removeChild(succesMessage);
       } else {
@@ -108,7 +110,7 @@
 
   function onSendData(evt) {
     evt.preventDefault();
-    enableInputs();
+    changeInputs();
     window.ajax.upload(new FormData(document.querySelector('.ad-form')), function (response, message) {
       if (response) {
         document.body.querySelector('main').appendChild(message);
@@ -155,8 +157,8 @@
   reset.addEventListener('click', onResetData);
 
   window.form = {
-    enableInputs: enableInputs,
-    setActivAddress: setActivAddress,
-    disableInputs: disableInputs,
+    changeInputs: changeInputs,
+    setActiveAddress: setActiveAddress,
+    changeInputs: changeInputs,
   };
 })();
