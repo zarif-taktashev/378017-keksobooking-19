@@ -1,10 +1,6 @@
 'use strict';
 
 (function () {
-  window.service(function (response) {
-    window.dataBase = response;
-  });
-
   window.data = {};
 
   window.data.validationRules = {
@@ -13,6 +9,13 @@
     NOT_FOR_GUESTS: '100 комнат не для гостей',
     HUNDRED_GUESTS: 'Необходимо 100 комнат'
   };
+
+  window.data.flatTypes = {
+    bungalo: 0,
+    flat: 1000,
+    house: 5000,
+    palace: 10000
+  }
 
   window.data.offsets = {
     PIN_OFFSET_X: 25,

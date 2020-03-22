@@ -34,26 +34,46 @@
     window.form.disableInputs();
     resetPin();
     window.form.setActivAddress();
-    mainPin.addEventListener('mousedown', makeActive);
-    mainPin.addEventListener('keydown', makeActive);
+    mainPin.addEventListener('mousedown', onMouseMakeActive);
+    mainPin.addEventListener('keydown', onKeyMakeActive);
   }
   makeNotActive();
 
-  function makeActive(evt) {
+  function onKeyMakeActive(evt) {
     evt.preventDefault();
-    mainPin.removeEventListener('mousedown', makeActive);
-    mainPin.removeEventListener('keydown', makeActive);
-    mainPin.addEventListener('mousedown', putPin);
-    if (evt.button === window.data.buttons.LEFT_MOUSE_BUTTON || evt.key === window.data.buttons.ENTER_BUTTON || evt.button === window.data.buttons.RIGHT_MOUSE_BUTTON) {
+    mainPin.removeEventListener('mousedown', onMouseMakeActive);
+    mainPin.removeEventListener('keydown', onKeyMakeActive);
+    mainPin.addEventListener('mousedown', onPutPin);
+    if (evt.button === window.data.buttons.RIGHT_MOUSE_BUTTON) {
       map.classList.remove('map--faded');
       form.classList.remove('ad-form--disabled');
-      window.pins.drawPins(window.dataBase);
-      window.form.enableInputs();
-      window.form.setActivAddress(evt);
+      window.ajax.service(function (response) {
+        window.dataBase = response;
+        window.pins.drawPins(response);
+        window.form.enableInputs();
+        window.form.setActivAddress(evt);
+      });
     }
   }
 
-  function putPin(evt) {
+  function onMouseMakeActive(evt) {
+    evt.preventDefault();
+    mainPin.removeEventListener('mousedown', onMouseMakeActive);
+    mainPin.removeEventListener('keydown', onKeyMakeActive);
+    mainPin.addEventListener('mousedown', onPutPin);
+    if (evt.button === window.data.buttons.LEFT_MOUSE_BUTTON || evt.button === window.data.buttons.RIGHT_MOUSE_BUTTON) {
+      map.classList.remove('map--faded');
+      form.classList.remove('ad-form--disabled');
+      window.ajax.service(function (response) {
+        window.dataBase = response;
+        window.pins.drawPins(response);
+        window.form.enableInputs();
+        window.form.setActivAddress(evt);
+      });
+    }
+  }
+
+  function onPutPin(evt) {
     evt.preventDefault();
     mainPin.style.position = 'absolute';
     mainPin.style.zIndex = 1000;
@@ -65,7 +85,7 @@
         mainPin.style.top = pageY - mapOffsetTop - mainPinOffsetHeight / 2 + 'px';
       }
       if (pageY - mapOffsetTop - mainPinOffsetHeight / 2 <= window.data.offsets.UPPER_BORDER - mainPinOffsetHeight / 2) {
-        mainPin.style.top = 130 - mainPinOffsetHeight / 2 + 'px';
+        mainPin.style.top = window.data.offsets.UPPER_BORDER - mainPinOffsetHeight / 2 + 'px';
       }
       if (pageX - mapOffsetLeft - mainPinOffsetWidth / 2 <= 0) {
         mainPin.style.left = 0 + 'px';
@@ -73,27 +93,30 @@
       if (pageX - mapOffsetLeft + mainPinOffsetWidth / 2 >= mapOffsetWidth) {
         mainPin.style.left = mapOffsetWidth - mainPinOffsetWidth + 'px';
       }
-      if (pageY >= 630) {
-        mainPin.style.top = window.data.offsets.LOWER_BOUND - mainPinOffsetHeight / 2 + 'px';
+      if (pageY + mainPin.offsetHeight / 2 + window.data.offsets.PIN_OFFSET_Y_ACTIVE >= window.data.offsets.LOWER_BOUND) {
+        mainPin.style.top = window.data.offsets.LOWER_BOUND - mainPin.offsetHeight - window.data.offsets.PIN_OFFSET_Y_ACTIVE + 'px';
       }
 
-      window.form.setActivAddress();
+      var x = Math.floor(mainPin.offsetLeft + (mainPin.offsetWidth / 2));
+      var y = Math.floor(mainPin.offsetTop + mainPin.offsetHeight + window.data.offsets.PIN_OFFSET_Y_ACTIVE);
+      address.value = x.toString() + ', ' + y.toString();
     }
 
     function onMouseMove(event) {
       moveAt(event.pageX, event.pageY);
     }
 
-    function deleteListeners() {
+    function onDeleteListeners() {
       mapPinsContainer.removeEventListener('mousemove', onMouseMove);
-      mainPin.removeEventListener('mousemove', deleteListeners);
+      mainPin.removeEventListener('mousemove', onDeleteListeners);
+      mapPinsContainer.removeEventListener('mouseup', onDeleteListeners);
     }
 
     mapPinsContainer.addEventListener('mousemove', onMouseMove);
-    mapPinsContainer.addEventListener('mouseup', deleteListeners);
+    mapPinsContainer.addEventListener('mouseup', onDeleteListeners);
   }
 
-  function showCard(evt) {
+  function onShowCard(evt) {
     if (evt.button === window.data.buttons.LEFT_MOUSE_BUTTON || evt.key === window.data.buttons.ENTER_BUTTON) {
       var target = evt.target;
       if (document.querySelector('.map__pin.map__pin--active')) {
@@ -113,8 +136,8 @@
     return false;
   });
 
-  mapPinsContainer.addEventListener('mousedown', showCard);
-  mapPinsContainer.addEventListener('keydown', showCard);
+  mapPinsContainer.addEventListener('mousedown', onShowCard);
+  mapPinsContainer.addEventListener('keydown', onShowCard);
   window.map = {
     makeNotActive: makeNotActive,
     hidePins: hidePins

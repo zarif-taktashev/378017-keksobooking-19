@@ -5,20 +5,21 @@
   var filters = document.querySelector('.map__filters-container');
   var map = document.querySelector('.map');
 
-  function removeCardFromMap() {
-    if (map.querySelector('.map__card')) {
-      map.removeChild(map.querySelector('.map__card'));
+  function removeFromMap() {
+    var mapCard = map.querySelector('.map__card');
+    if (mapCard) {
+      map.removeChild(mapCard);
     }
   }
 
 
-  function hideCard(evt) {
+  function onHideCard(evt) {
     if (evt.button === window.data.buttons.LEFT_MOUSE_BUTTON || evt.key === window.data.buttons.ESC_BUTTON) {
       document.querySelector('.map__pin.map__pin--active').classList.remove('map__pin--active');
-      removeCardFromMap();
+      removeFromMap();
     }
     if (evt.currentTarget.tagName === 'BODY' && evt.key === window.data.buttons.ESC_BUTTON) {
-      document.body.removeEventListener('keydown', hideCard);
+      document.body.removeEventListener('keydown', onHideCard);
     }
   }
 
@@ -106,14 +107,13 @@
     } else {
       card.querySelector('.popup__avatar').style.display = 'none';
     }
-    card.querySelector('.popup__close').addEventListener('mousedown', hideCard);
-    document.body.addEventListener('keydown', hideCard);
+    card.querySelector('.popup__close').addEventListener('mousedown', onHideCard);
+    document.body.addEventListener('keydown', onHideCard);
     fragment.appendChild(card);
     map.insertBefore(fragment, filters);
   }
   window.card = {
-    hideCard: hideCard,
     drawCards: drawCards,
-    removeCardFromMap: removeCardFromMap
+    removeFromMap: removeFromMap
   };
 })();

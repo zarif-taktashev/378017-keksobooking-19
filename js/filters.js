@@ -14,11 +14,18 @@
   var filterConditioner = filtersForm.querySelector('#filter-conditioner');
   var lastTomeOut;
 
+  function checkFeatures(filter, i) {
+    return window.dataBase[i].offer.features.indexOf(filter.value) > -1;
+  }
+
   function checkForm() {
     window.map.hidePins();
-    window.card.removeCardFromMap();
+    window.card.removeFromMap();
     var fragment = document.createDocumentFragment();
-    for (var i = 0; i < window.data.pins.LIMITS; i++) {
+    for (var i = 0; i < window.dataBase.length; i++) {
+      if (fragment.children.length === 5) {
+        break;
+      }
       var result = true;
       if (window.dataBase[i].offer.type !== housingType.value && housingType.value !== 'any') {
         result = false;
@@ -43,22 +50,22 @@
         result = false;
       }
       if (filterWifi.checked) {
-        result = window.dataBase[i].offer.features.indexOf(filterWifi.value) > -1 ? result : false;
+        result = checkFeatures(filterWifi, i) ? result : false;
       }
       if (filterDishwasher.checked) {
-        result = window.dataBase[i].offer.features.indexOf(filterDishwasher.value) > -1 ? result : false;
+        result = checkFeatures(filterDishwasher, i) ? result : false;
       }
       if (filterParking.checked) {
-        result = window.dataBase[i].offer.features.indexOf(filterParking.value) > -1 ? result : false;
+        result = checkFeatures(filterParking, i) ? result : false;
       }
       if (filterWasher.checked) {
-        result = window.dataBase[i].offer.features.indexOf(filterWasher.value) > -1 ? result : false;
+        result = checkFeatures(filterWasher, i) ? result : false;
       }
       if (filterElevator.checked) {
-        result = window.dataBase[i].offer.features.indexOf(filterElevator.value) > -1 ? result : false;
+        result = checkFeatures(filterElevator, i) ? result : false;
       }
       if (filterConditioner.checked) {
-        result = window.dataBase[i].offer.features.indexOf(filterConditioner.value) > -1 ? result : false;
+        result = checkFeatures(filterConditioner, i) ? result : false;
       }
 
       if (result) {
