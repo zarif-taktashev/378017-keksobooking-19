@@ -159,6 +159,5 @@
   window.form = {
     changeInputs: changeInputs,
     setActiveAddress: setActiveAddress,
-    changeInputs: changeInputs,
   };
 })();

@@ -51,7 +51,7 @@
 
     xhr.open('GET', URL);
     xhr.send();
-  };
+  }
 
   function upload(data, callBack) {
     var xhr = new XMLHttpRequest();
@@ -68,10 +68,10 @@
 
     xhr.open('POST', SEND_URL, true);
     xhr.send(data);
-  };
+  }
 
   window.ajax = {
     upload: upload,
     service: service
-  }
+  };
 })();
