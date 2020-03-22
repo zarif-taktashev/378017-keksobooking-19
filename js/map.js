@@ -66,7 +66,7 @@
     mainPinEvent(evt);
     if (evt.button === window.data.keys.ENTER_BUTTON) {
       window.ajax.service(function (response) {
-        makeActive(response, evt)
+        makeActive(response, evt);
       });
     }
   }
@@ -75,7 +75,7 @@
     mainPinEvent(evt);
     if (evt.button === window.data.keys.LEFT_MOUSE_BUTTON || evt.button === window.data.keys.RIGHT_MOUSE_BUTTON) {
       window.ajax.service(function (response) {
-        makeActive(response, evt)
+        makeActive(response, evt);
       });
     }
   }
