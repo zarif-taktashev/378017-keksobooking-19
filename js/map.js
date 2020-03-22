@@ -5,6 +5,7 @@
   var form = document.querySelector('.ad-form');
   var mapPinsContainer = document.querySelector('.map__pins');
   var map = document.querySelector('.map');
+  var address = document.querySelector('#address');
   var mapOffsetLeft = map.offsetLeft;
   var mapOffsetHeight = map.offsetHeight;
   var mapOffsetTop = map.offsetTop;

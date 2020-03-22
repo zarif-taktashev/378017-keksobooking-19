@@ -12,7 +12,7 @@
   var succesMessage = document.querySelector('#success').content.querySelector('.success');
   var errorMessage = document.querySelector('#error').content.querySelector('.error');
 
-  function checkResponse (xhr) {
+  function checkResponse(xhr) {
     var error;
     switch (xhr.status) {
       case OK:

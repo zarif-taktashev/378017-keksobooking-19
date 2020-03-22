@@ -15,7 +15,7 @@
     flat: 1000,
     house: 5000,
     palace: 10000
-  }
+  };
 
   window.data.offsets = {
     PIN_OFFSET_X: 25,
