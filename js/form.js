@@ -15,6 +15,7 @@
   var reset = document.querySelector('.ad-form__reset');
   var succesMessage = document.querySelector('#success').content.querySelector('.success');
   var errorMessage = document.querySelector('#error').content.querySelector('.error');
+  var invalid;
 
   function enableInputs() {
     for (var i = 0; i < fieldsets.length; i++) {
@@ -126,12 +127,16 @@
 
   function onMakeRed(evt) {
     form.removeEventListener('invalid', onMakeRed, true);
+    invalid = evt.target;
     evt.target.style.border = '1px solid #ff6547';
     evt.target.addEventListener('change', onResetRed);
   }
 
   function onResetData() {
     form.reset();
+    if (invalid) {
+      invalid.style.border = '1px solid #d9d9d3';
+    }
     mapFilter.reset();
     window.card.removeFromMap();
     price.placeholder = '1000';

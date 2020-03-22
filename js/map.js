@@ -6,6 +6,8 @@
   var mapPinsContainer = document.querySelector('.map__pins');
   var map = document.querySelector('.map');
   var address = document.querySelector('#address');
+  var avatarImg = document.querySelector('.ad-form-header__preview img');
+  var photo = document.querySelector('.ad-form__photo');
   var mapOffsetLeft = map.offsetLeft;
   var mapOffsetHeight = map.offsetHeight;
   var mapOffsetTop = map.offsetTop;
@@ -34,6 +36,10 @@
     form.classList.add('ad-form--disabled');
     window.form.disableInputs();
     resetPin();
+    avatarImg.src = 'img/muffin-grey.svg';
+    if (photo.querySelector('img')) {
+      photo.removeChild(photo.querySelector('img'));
+    }
     window.form.setActivAddress();
     mainPin.addEventListener('mousedown', onMouseMakeActive);
     mainPin.addEventListener('keydown', onKeyMakeActive);
@@ -120,13 +126,16 @@
   function onShowCard(evt) {
     if (evt.button === window.data.buttons.LEFT_MOUSE_BUTTON || evt.key === window.data.buttons.ENTER_BUTTON) {
       var target = evt.target;
-      if (document.querySelector('.map__pin.map__pin--active')) {
-        document.querySelector('.map__pin.map__pin--active').classList.remove('map__pin--active');
-      }
       if (target.tagName === window.tagnames.IMG && !target.parentElement.classList.contains('map__pin--main')) {
+        if (document.querySelector('.map__pin.map__pin--active')) {
+          document.querySelector('.map__pin.map__pin--active').classList.remove('map__pin--active');
+        }
         target.parentElement.classList.add('map__pin--active');
         window.card.drawCards(window.dataBase[target.parentElement.dataset.index]);
       } else if (target.tagName === window.tagnames.BUTTON && !target.classList.contains('map__pin--main')) {
+        if (document.querySelector('.map__pin.map__pin--active')) {
+          document.querySelector('.map__pin.map__pin--active').classList.remove('map__pin--active');
+        }
         target.classList.add('map__pin--active');
         window.card.drawCards(window.dataBase[target.dataset.index]);
       }
