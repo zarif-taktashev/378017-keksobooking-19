@@ -8,8 +8,6 @@
   var UNAUTHORIZED = 401;
   var NOT_FOUND = 404;
   var TIMEOUT = 10000;
-  var succesMessage = document.querySelector('#success').content.querySelector('.success');
-  var errorMessage = document.querySelector('#error').content.querySelector('.error');
 
   function checkResponse(xhr) {
     var error;
@@ -35,37 +33,32 @@
     return error;
   }
 
-  function service(onSuccess, onError) {
+  function loadData(onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responsType = 'json';
-    xhr.addEventListener('load', function () {
+    xhr.timeout = TIMEOUT;
+
+    xhr.addEventListener('load', function() {
       var error = checkResponse(xhr);
       if (error) {
         onError(error);
       } else {
         onSuccess(JSON.parse(xhr.response));
       }
+
     });
 
-    xhr.timeout = TIMEOUT;
+    return xhr;
+  }
 
+  function service(onSuccess, onError) {
+    var xhr = loadData(onSuccess, onError);
     xhr.open('GET', URL);
     xhr.send();
   }
 
-  function upload(data, callBack) {
-    var xhr = new XMLHttpRequest();
-    xhr.addEventListener('load', function () {
-      var error = checkResponse(xhr);
-      if (error) {
-        callBack(error, errorMessage);
-      } else {
-        callBack(JSON.parse(xhr.response), succesMessage);
-      }
-    });
-
-    xhr.timeout = TIMEOUT;
-
+  function upload(data, onSuccess, onError) {
+    var xhr = loadData(onSuccess, onError);
     xhr.open('POST', SEND_URL, true);
     xhr.send(data);
   }

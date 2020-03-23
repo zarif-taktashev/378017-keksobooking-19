@@ -14,6 +14,7 @@
   var mapOffsetWidth = map.offsetWidth;
   var mainPinOffsetWidth = mainPin.offsetWidth;
   var mainPinOffsetHeight = mainPin.offsetHeight;
+  makeNotActive();
 
   function hidePins() {
     var pins = document.querySelectorAll('.map__pin');
@@ -44,7 +45,6 @@
     mainPin.addEventListener('mousedown', onMouseMakeActive);
     mainPin.addEventListener('keydown', onKeyMakeActive);
   }
-  makeNotActive();
 
   function mainPinEvent(evt) {
     evt.preventDefault();

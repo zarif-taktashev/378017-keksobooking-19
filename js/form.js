@@ -108,15 +108,24 @@
     }
   }
 
+  function takeMessage() {
+    document.body.addEventListener('mousedown', onMouseHideMessage);
+    document.body.addEventListener('keydown', onKeyHideMessage);
+    window.map.makeNotActive();
+  }
+
   function onSendData(evt) {
     evt.preventDefault();
-    changeInputs();
-    window.ajax.upload(new FormData(document.querySelector('.ad-form')), function (response, message) {
+    address.parentNode.disabled = false;
+    window.ajax.upload(new FormData(document.querySelector('.ad-form')), function (response) {
       if (response) {
-        document.body.querySelector('main').appendChild(message);
-        document.body.addEventListener('mousedown', onMouseHideMessage);
-        document.body.addEventListener('keydown', onKeyHideMessage);
-        window.map.makeNotActive();
+        document.body.querySelector('main').appendChild(succesMessage);
+        takeMessage();
+      }
+    }, function (response) {
+      if (response) {
+        document.body.querySelector('main').appendChild(errorMessage);
+        takeMessage();
       }
     });
   }
