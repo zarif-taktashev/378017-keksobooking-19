@@ -38,7 +38,7 @@
     xhr.responsType = 'json';
     xhr.timeout = TIMEOUT;
 
-    xhr.addEventListener('load', function() {
+    xhr.addEventListener('load', function () {
       var error = checkResponse(xhr);
       if (error) {
         onError(error);
